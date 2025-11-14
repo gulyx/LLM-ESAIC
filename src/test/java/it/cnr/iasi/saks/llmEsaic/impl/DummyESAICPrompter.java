@@ -31,4 +31,12 @@ public class DummyESAICPrompter extends AbstractESAICPrompter {
 		
 		return answer;
 	}
+	
+	public boolean loadESAIC(int picoNumber, int recNumber) {
+		if (! this.areRecomandationsProcessable()) {
+			this.loadESAIC();
+		}
+		return this.isRecomandationLoaded(picoNumber, recNumber);
+	}
+
 }

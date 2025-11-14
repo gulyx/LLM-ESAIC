@@ -25,7 +25,7 @@ import org.junit.jupiter.api.Test;
 
 import it.cnr.iasi.saks.llmEsaic.impl.DummyESAICPrompter;
 
-public class DummyTests {
+public class BasicTest {
 
     @Test
     public void upAndRunningTest() {
@@ -59,5 +59,5 @@ public class DummyTests {
     	answer = prompter.chatLLM(prompt);
     	assertTrue(answer.contains("Guybrush Threepwood"));
     }
-
+    
 }
