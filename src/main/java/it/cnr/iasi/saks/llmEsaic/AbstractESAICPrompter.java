@@ -30,6 +30,7 @@ import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
+import it.cnr.iasi.saks.llmEsaic.prompts.ESAICPrompts;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
@@ -125,27 +126,63 @@ public abstract class AbstractESAICPrompter {
 		return this.lastResponse;
 	}
 	
+	protected boolean areRecomandationsProcessable() {
+		boolean status = (this.loadedRecommendations != null) && (!this.loadedRecommendations.isEmpty());		
+		return status;
+	}
+	
+	protected boolean isRecomandationLoaded(String picoNumber, String recNumber) {
+		boolean isLoaded = this.areRecomandationsProcessable();
+		if (isLoaded) {
+			String recID = this.getRecommendationID(picoNumber, recNumber);
+			Boolean status = this.loadedRecommendations.get(recID);
+			isLoaded = (status == null) ? false : status;
+		}
+		
+		return isLoaded;
+	}
+
+	protected boolean isRecomandationLoaded(int picoNumber, int recNumber) {
+		return isRecomandationLoaded(String.valueOf(picoNumber), String.valueOf(recNumber));	
+	}
+
 	protected void loadESAIC() {
 		this.loadedRecommendations.clear();
 		
-		for (int counterPico = 1; counterPico < TOTAL_PICO; counterPico++) {
+		String prompt = ESAICPrompts.getRecommendationLoadingHeader();
+		String response = this.chatLLM(prompt);
+//		boolean headerProcessed = (response.equalsIgnoreCase(ESAICPrompts.getAck()));
+		boolean headerProcessed = response.contains(ESAICPrompts.getAck());
+
+		for (int counterPico = 1; (headerProcessed) && (counterPico <= TOTAL_PICO); counterPico++) {
+			System.err.println("Processing PICO: " + counterPico);
+
 			boolean isRecommendationUnset = false;
 			int counterRec = 0;
 			while (! isRecommendationUnset){
 				counterRec++;
 				String recID = this.getRecommendationID(counterPico, counterRec);
+				System.err.println("Processing Recommendation: " + recID);
+
 				String recommendation = this.loadRecommendation(counterPico, counterRec);
 				
 				isRecommendationUnset = recommendation.equals(UNSET);
 				if (! isRecommendationUnset) {
-					String response = this.chatLLM(recommendation);
-					isRecommendationUnset = response.contains(UNSET);
+					prompt = recID + ": " + recommendation;
+					response = this.chatLLM(prompt);
+//					isRecommendationUnset = response.contains(UNSET);
+					isRecommendationUnset = !(response.contains(ESAICPrompts.getAck()));
 					this.loadedRecommendations.put(recID, ! isRecommendationUnset);
 				} else {
 					this.loadedRecommendations.put(recID, false);					
 				}				
+				System.err.println("done with: " + recID);
 			}
+			System.err.println("done with PICO: " + counterPico);
 		}		
+
+		prompt = ESAICPrompts.getEndOfInput();
+		response = this.chatLLM(prompt);
 	}
 	
 	private String loadRecommendation(String picoNumber, String recNumber) {
@@ -180,7 +217,7 @@ public abstract class AbstractESAICPrompter {
 	}
 	
 	private String getRecommendationID(String picoNumber, String recNumber) {
-		return picoNumber + "_" + recNumber;		
+		return "R" + picoNumber + "." + recNumber;		
 	}
 	
 	private String getRecommendationID(int picoNumber, int recNumber) {
