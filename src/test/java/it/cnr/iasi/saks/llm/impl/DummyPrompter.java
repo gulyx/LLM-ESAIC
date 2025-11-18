@@ -15,7 +15,7 @@
  * along with LLM-ESAIC. If not, see <https://www.gnu.org/licenses/>
  *
  */
-package it.cnr.iasi.saks.llmEsaic.impl;
+package it.cnr.iasi.saks.llm.impl;
 
 import it.cnr.iasi.saks.llm.AbstractPrompter;
 

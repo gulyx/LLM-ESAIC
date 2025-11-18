@@ -15,7 +15,7 @@
  * along with LLM-ESAIC. If not, see <https://www.gnu.org/licenses/>
  *
  */
-package it.cnr.iasi.saks.llmEsaic.tests;
+package it.cnr.iasi.saks.llm.impl.tests;
 
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNotNull;
@@ -23,7 +23,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import it.cnr.iasi.saks.llmEsaic.impl.DummyPrompter;
+import it.cnr.iasi.saks.llm.impl.DummyPrompter;
 
 public class BasicTest {
 
