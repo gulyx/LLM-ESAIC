@@ -30,102 +30,59 @@ import org.testcontainers.shaded.org.apache.commons.io.IOUtils;
 
 import dev.langchain4j.model.chat.ChatModel;
 import dev.langchain4j.model.ollama.OllamaChatModel;
+import it.cnr.iasi.saks.llm.AbstractPrompter;
 import it.cnr.iasi.saks.llmEsaic.prompts.ESAICPrompts;
 import dev.langchain4j.data.message.UserMessage;
 import dev.langchain4j.data.message.AiMessage;
 import dev.langchain4j.data.message.ChatMessage;
 
-public abstract class AbstractESAICPrompter {
+public abstract class AbstractESAICPrompter extends AbstractPrompter {
 	
-	private ChatModel llm; 
-	protected String lastResponse;
-
-    private static final String OLLAMA_BASE_URL = "http://localhost:11434";
-    private static final String LLM_NAME = "llama3.2";
-    private static final String LLM_VERSION = "latest";
-    private static final double LLM_TEMPERATURE = 0.8;
-    private static final int LLM_TIMEOUT = 300;
-
     private static final int TOTAL_PICO = 12;
 
     private static final String PICO_TAG = "_§§_";
     private static final String REC_TAG = "_çç_";
     private static final String REC_SEPARATOR = "_";
-    private static final String CASE_TAG = "_°°_";
     
-    private static final String ESAIC_PATH = "src/main/resources/ESAIC";
+    protected static final String ESAIC_PATH = "src/main/resources/ESAIC";
 	private static final String ESAIC_PICO_PATH = ESAIC_PATH + "/PICO" + PICO_TAG;
-	private static final String ESAIC_CASE_PATH = ESAIC_PATH + "/Cases";
 
 	private static final String REC_FILENAME = "R"+REC_TAG+".txt";
-	private static final String CASE_FILENAME = "case"+CASE_TAG+".txt";
 
-	private static final String UNSET = "THIS ITEM HAS NOT BEEN SET";
-
-    private List<ChatMessage> chatMessageHistory;
+	protected static final String UNSET = "THIS ITEM HAS NOT BEEN SET";
 
     private Map<String, Boolean> loadedRecommendations;
-
+	
     public AbstractESAICPrompter () {
-		this(OLLAMA_BASE_URL,LLM_NAME,LLM_VERSION);
+		super();
+
+		this.loadedRecommendations = new HashMap<String, Boolean>();
 	}
 
 	public AbstractESAICPrompter (String url, String llmName, String version) {		
-		this(OLLAMA_BASE_URL,llmName+":"+version);
+		super(url, llmName, version);
+
+		this.loadedRecommendations = new HashMap<String, Boolean>();
 	}
 	
 	public AbstractESAICPrompter (String url, String llmName) {		
-	    // Build the ChatLanguageModel
-	    this.llm = OllamaChatModel.builder()
-		                       .baseUrl(url)
-		                       .modelName(llmName)
-		                       .temperature(LLM_TEMPERATURE)
-		                       .timeout(Duration.ofSeconds(LLM_TIMEOUT))
-		                       .build();
-
-	    this.chatMessageHistory = new ArrayList<ChatMessage>();
-	    
+		super(url, llmName);
+		
 	    this.loadedRecommendations = new HashMap<String, Boolean>();
 	}
 
 	public AbstractESAICPrompter (ChatModel llm) {
-	    this.llm = llm;
-	}
-    
-	public String queryLLM(String prompt) {		
-		this.lastResponse = this.llm.chat(prompt);
-		return this.lastResponse;
-	}
+	    super(llm);
 
-	public String chatLLM(String prompt) {
-//	Conceptual example with Java Varargs from the tutorial:		
-//    	UserMessage firstUserMessage = UserMessage.from("Hello, my name is Klaus");
-//    	AiMessage firstAiMessage = model.chat(firstUserMessage).aiMessage(); // Hi Klaus, how can I help you?
-//    	UserMessage secondUserMessage = UserMessage.from("What is my name?");
-//    	AiMessage secondAiMessage = model.chat(firstUserMessage, firstAiMessage, secondUserMessage).aiMessage(); // Klaus    	
-    			
-		UserMessage currentMessage = new UserMessage(prompt);
-		this.chatMessageHistory.add(currentMessage);
-				
-//	This is an example on how to convert a List into Java Varargs. Possibly the invoke to "streams()" can be omitted.
-//		locations.stream().toArray(WorldLocation[]::new)
-		AiMessage currentResponse = this.llm.chat(this.chatMessageHistory.stream().toArray(ChatMessage[]::new)).aiMessage();
-		this.chatMessageHistory.add(currentResponse);
-		
-		this.lastResponse = currentResponse.text(); 		
-		return this.lastResponse;
-		
+	    this.loadedRecommendations = new HashMap<String, Boolean>();
 	}
 	
+	@Override
 	public void cleanHistory() {		
-		this.chatMessageHistory.clear();
+		super.cleanHistory();
 		this.loadedRecommendations.clear();
 	}
 
-	public String getLastResponse() {
-		return this.lastResponse;
-	}
-	
 	protected boolean areRecomandationsProcessable() {
 		boolean status = (this.loadedRecommendations != null) && (!this.loadedRecommendations.isEmpty());		
 		return status;
