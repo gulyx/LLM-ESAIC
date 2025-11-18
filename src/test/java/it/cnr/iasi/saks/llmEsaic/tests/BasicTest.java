@@ -23,24 +23,37 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.jupiter.api.Test;
 
-import it.cnr.iasi.saks.llmEsaic.impl.DummyESAICPrompter;
+import it.cnr.iasi.saks.llmEsaic.impl.DummyPrompter;
 
 public class BasicTest {
 
     @Test
     public void upAndRunningTest() {
-    	DummyESAICPrompter prompter = new DummyESAICPrompter();
+    	DummyPrompter prompter = new DummyPrompter();
     	String answer = prompter.oneShotInteraction();
     	assertNotNull(answer);
     }
 
     @Test
-    public void simpleConversationWithoutMemoryTest() {
-    	DummyESAICPrompter prompter = new DummyESAICPrompter();
+    public void simpleConversation1WithoutMemoryTest() {
+    	DummyPrompter prompter = new DummyPrompter();
     	
-    	String prompt = "My name is Guybrush Threepwood. If it is clear just reply: \"OK\"";		
+    	String prompt = "My name is Guybrush Threepwood. If it is clear just reply: \"--OK--\"";		
+    	String answer = prompter.queryLLM_NoHistory(prompt);    		
+    	assertTrue(answer.contains("--OK--"));
+
+    	prompt = "What's my name?";		
+    	answer = prompter.queryLLM_NoHistory(prompt);
+    	assertFalse(answer.contains("Guybrush Threepwood"));
+    }
+
+    @Test
+    public void simpleConversation2WithoutMemoryTest() {
+    	DummyPrompter prompter = new DummyPrompter();
+    	
+    	String prompt = "My name is Guybrush Threepwood. If it is clear just reply: \"--OK--\"";		
     	String answer = prompter.queryLLM(prompt);    		
-    	assertTrue(answer.contains("OK"));
+    	assertTrue(answer.contains("--OK--"));
 
     	prompt = "What's my name?";		
     	answer = prompter.queryLLM(prompt);
@@ -48,16 +61,66 @@ public class BasicTest {
     }
 
     @Test
-    public void simpleConversationTest() {
-    	DummyESAICPrompter prompter = new DummyESAICPrompter();
+    public void simpleConversation3WithoutMemoryTest() {
+    	DummyPrompter prompter = new DummyPrompter();
     	
-    	String prompt = "My name is Guybrush Threepwood. If it is clear just reply: \"OK\"";		
+    	String prompt = "My name is Guybrush Threepwood. If it is clear just reply: \"--OK--\"";		
     	String answer = prompter.chatLLM(prompt);    		
-    	assertTrue(answer.contains("OK"));
+    	assertTrue(answer.contains("--OK--"));
+
+    	prompt = "What's my name?";		
+    	answer = prompter.queryLLM_NoHistory(prompt);
+    	assertFalse(answer.contains("Guybrush Threepwood"));
+    }
+
+    @Test
+    public void simpleConversationWithSomeMemoryTest() {
+    	DummyPrompter prompter = new DummyPrompter();
+    	
+    	String prompt = "My name is Guybrush Threepwood. If it is clear just reply: \"--OK--\"";		
+    	String answer = prompter.chatLLM(prompt);    		
+    	assertTrue(answer.contains("--OK--"));
+
+    	prompt = "What's my name?";		
+    	answer = prompter.queryLLM(prompt);
+    	assertTrue(answer.contains("Guybrush Threepwood"));
+    }
+
+    @Test
+    public void simpleConversationTest() {
+    	DummyPrompter prompter = new DummyPrompter();
+    	
+    	String prompt = "My name is Guybrush Threepwood. If it is clear just reply: \"--OK--\"";		
+    	String answer = prompter.chatLLM(prompt);    		
+    	assertTrue(answer.contains("--OK--"));
 
     	prompt = "What's my name?";		
     	answer = prompter.chatLLM(prompt);
     	assertTrue(answer.contains("Guybrush Threepwood"));
     }
     
+    @Test
+    public void advancedConversationTest() {
+    	DummyPrompter prompter = new DummyPrompter();
+    	
+    	// PROMPTER must recall this information
+    	String prompt = "My name is Guybrush Threepwood. If it is clear just reply: \"--OK--\"";		
+    	String answer = prompter.chatLLM(prompt);    		
+    	assertTrue(answer.contains("--OK--"));
+
+    	// PROMPTER should not recall this information
+    	prompt = "Update your information about my name, from now call me LeChuck. If the message is clear only reply: \"--OK--\"";		
+    	answer = prompter.queryLLM(prompt);    		
+    	assertTrue(answer.contains("--OK--"));
+
+    	prompt = "What's my name?";		
+    	answer = prompter.chatLLM(prompt);
+    	assertFalse(answer.contains("LeChuck"));
+    	
+    	// PROMPTER should not recall anything
+    	prompt = "What's my name? If you ignore it just reply: \"--NONE--\"";		
+    	answer = prompter.queryLLM_NoHistory(prompt);
+    	assertTrue(answer.contains("--NONE--"));
+
+    }
 }
