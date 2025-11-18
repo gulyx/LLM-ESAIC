@@ -24,19 +24,11 @@ public class DummyESAICPrompter extends AbstractESAICPrompter {
 	public DummyESAICPrompter () {
 	}
 	
-	public String oneShotInteraction() {
-		String prompt = "In very few words, who is Guybrush Threepwood?";
-		
-		String answer = this.queryLLM(prompt);
-		
-		return answer;
-	}
-	
 	public boolean loadESAIC(int picoNumber, int recNumber) {
 		if (! this.areRecomandationsProcessable()) {
 			this.loadESAIC();
 		}
 		return this.isRecomandationLoaded(picoNumber, recNumber);
 	}
-
+	
 }
