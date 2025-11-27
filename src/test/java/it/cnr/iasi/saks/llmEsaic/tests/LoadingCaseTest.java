@@ -27,7 +27,7 @@ public class LoadingCaseTest {
     }
 	
     @ParameterizedTest
-    @CsvSource({"A1"})
+    @CsvSource({"A1", "A2", "A3", "A4"})
     public void processCasesWithoutAssessingSuggestionsTest(String caseID) {    	
     	prompter.loadCase(caseID);
     	prompter.processCase();
