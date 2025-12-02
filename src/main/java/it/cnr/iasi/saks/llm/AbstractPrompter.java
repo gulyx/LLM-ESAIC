@@ -38,7 +38,8 @@ public abstract class AbstractPrompter {
 //    private static final double LLM_TEMPERATURE = 0.8;
     private static final double LLM_TEMPERATURE = 0.5;
 //    private static final double LLM_TEMPERATURE = 0.0;
-    private static final int LLM_TIMEOUT = 300;
+//    private static final int LLM_TIMEOUT = 300;
+    private static final int LLM_TIMEOUT = 600;
 
     private List<ChatMessage> chatMessageHistory;
 
