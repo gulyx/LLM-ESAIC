@@ -49,19 +49,19 @@ public class ESAICPrompts {
 			+ " (European Society of Anaesthesiology and Intensive Care). "
 			+ "Each Recommendation in introduced by its identifier: RX.Y, where X and Y are numbers. "
 //			+ "Each Recommendation has a severity index, for example a severity index G for the Recommendation RX.Y is reported as: (RX.Y GRADE: G) . "
-			+ "Each Recommendation has a severity index, for example a severity index G for the Recommendation RX.Y is reported as: (RX.Y has severity index: G) . "
+			+ "Each Recommendation has a severity index, for example a severity index G for the Recommendation RX.Y is reported as: \"(RX.Y has severity index: G)\" . "
 			+ "When the process is over, I will prompt you with: \"" + END_OF_INPUT + "\". ";
 
 	private final static String RECOMMENDATION_LOADING_ACK_HEADER = "I am loading a list of Recommandations by ESAIC"
 			+ " (European Society of Anaesthesiology and Intensive Care). "
 			+ "Each Recommendation in introduced by its identifier: RX.Y, where X and Y are numbers. "
 //			+ "Each Recommendation has a severity index, for example a severity index G for the Recommendation RX.Y is reported as: (RX.Y GRADE: G) . "
-			+ "Each Recommendation has a severity index, for example a severity index G for the Recommendation RX.Y is reported as: (RX.Y has severity index: G) . "
+			+ "Each Recommendation has a severity index, for example a severity index G for the Recommendation RX.Y is reported as: \"(RX.Y has severity index: G)\" . "
 			+ "After each Recommendation is processed your answer has to be only: \""+ ACK + "\". "
 			+ "When the process is over, I will prompt you with: \"" + END_OF_INPUT + "\". ";
 
 //	private final static String GRADE_DESCRIPTIONS_HEADER = "As you know, an ESAIC Recommendations RX.Y has a severity index expressed as: (RX.Y GRADE: G) "
-	private final static String GRADE_DESCRIPTIONS_HEADER = "As you know, an ESAIC Recommendations RX.Y has a severity index expressed as: (RX.Y has severity index: G) "
+	private final static String GRADE_DESCRIPTIONS_HEADER = "As you know, an ESAIC Recommendations RX.Y has a severity index expressed as: \"(RX.Y has severity index: G)\" "
 			+ "Overall: Strong recommendations should be take in consideration, while Weak recommendations can be take in considerations. "
 			+ "In addition: High-quality evidences impliy confidence in the estimation of benefits and risks; moderate-quality evidence can impact the confidence in the estimation of benefits and risks; low-quality evidences may lead to uncertain effects; very low-quality evidences leads to high uncertainty in the estimates, but benefits may outweigh risks and burdens. "
 			+ "These are the meaning of the possible values associated with the severity index G:"
@@ -71,7 +71,8 @@ public class ESAICPrompts {
 			+ "2A means: Weak recommendation, high-quality evidence; "
 			+ "2B means: Weak recommendation, moderate-quality evidence; "
 			+ "2C means: Weak recommendation, low-quality evidence; "
-			+ "CPS means: Very low-quality evidence. ";
+			+ "3A means: Very low-quality evidence. ";
+//			+ "CPS means: Very low-quality evidence. ";
 
 	private final static String CASE_LOADING_HEADER = "As professional expert in Anaesthesiology and Intensive Care "
 			+ "you are requested to suggest a surgery decision on a specific clinical case. "
