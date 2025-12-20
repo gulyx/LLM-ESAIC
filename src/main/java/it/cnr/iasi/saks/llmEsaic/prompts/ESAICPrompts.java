@@ -17,6 +17,8 @@
  */
 package it.cnr.iasi.saks.llmEsaic.prompts;
 
+import java.util.List;
+
 public class ESAICPrompts {
 
 	private final static String ACK = "--OK--";
@@ -75,7 +77,7 @@ public class ESAICPrompts {
 //			+ "CPS means: Very low-quality evidence. ";
 
 	private final static String CASE_LOADING_HEADER = "As professional expert in Anaesthesiology and Intensive Care "
-			+ "you are requested to suggest a surgery decision on a specific clinical case. "
+			+ "you are requested to advise if a surgery on a specific clinical case should be either performed or postponed. "
 			+ "Each clinical case is reported as a whole between the following tags: "
 			+ BEGIN_OF_INPUT + ", and " + END_OF_INPUT + ". "
 			+ "Each case is structured as follows: "
@@ -85,11 +87,14 @@ public class ESAICPrompts {
 			+ CASE_ANAMNESIS + ": which reports anamnesis information about the clinical case; "
 			+ CASE_EXAMINATIONS + ": which reports data about objective examinations performed on the patient; "
 			+ CASE_ANESTHESIOLOGICAL_NOTE + ": which reports any other information by some Anaesthesiology expert. "
-			+ "Each decision has to be retuned between a line containing only the tag: "
-			+ BEGIN_OF_ANSWER + ", and a line containing only the tag: " + END_OF_ANSWER + " ." 
-			+ "Each decision has to be structured as follows: "
+//			+ "Each advise you reply has to be structured as follows: "
+			+ "Each advise you reply has to be structured in " + CommonConstants.getAnswerLanguage() +". "
+//			+ "Detect the language that is mainly used in the case structure and return each advise accordingly."
+			+ "Also, each advise you reply has to be structured as follows: "
 			+ CASE_DECISION + ": where you only report either : " + CASE_POSTPONE + ", or " + CASE_PROCEED + ". You report the former if the suggestion is to postpone the surgery, while the latter if the suggestion is to proceed with the surgery."
-			+ CASE_DECISION_EXPLAINATION + ": where you explain your suggestion. Note that your explaination has to take into account and explicitly cite several ESAIC Recommendations.";
+			+ CASE_DECISION_EXPLAINATION + ": where you explain your suggestion. Note that your explaination has to take into account and explicitly cite several ESAIC Recommendations."
+			+ "Each advice you reply has to be retuned between a line containing only the tag: "
+			+ BEGIN_OF_ANSWER + ", and a line containing only the tag: " + END_OF_ANSWER + " ."; 
 
 	public static String getAckMessage() {
 		return "If this message is clear just reply: \""+ ACK + "\".";
@@ -159,4 +164,33 @@ public class ESAICPrompts {
 		return END_OF_ANSWER;
 	}
 
+	public static String getCaseDecision() {
+		return CASE_DECISION;
+	}
+
+	public static String getCaseDecisionExplaination() {
+		return CASE_DECISION_EXPLAINATION;
+	}
+
+	public static String getCaseProceed() {
+		return CASE_PROCEED;
+	}
+
+	public static String getCasePostpone() {
+		return CASE_POSTPONE;
+	}
+
+	public static String getRequestForResumePrompt(int maxWords, List<String> itemList) {
+		String message = "You have to report in one paragraph a resume of the following inputs "
+				+ "which are reported below each one between the tags: "
+				+ BEGIN_OF_INPUT + ", and " + END_OF_INPUT + ". \n"
+//				+ "Your resume paragraph has to be retuned between a line containing only the tag: "
+//				+ BEGIN_OF_ANSWER + ", and a line containing only the tag: " + END_OF_ANSWER + " .\n" 
+				+ "The lenght of the resume paragraoh should countain around " + maxWords + " words. \n"
+				+ "In the resume always keep all the references to identifiers of ESAIC recommendations but do not include their whole formulation.\n";
+		for (String item : itemList) {
+			message += BEGIN_OF_INPUT + "\n " + item + "\n " + END_OF_INPUT +"\n";  
+		}
+		return message;
+	}
 }
