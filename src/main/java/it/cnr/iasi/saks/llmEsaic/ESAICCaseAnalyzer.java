@@ -28,7 +28,7 @@ import it.cnr.iasi.saks.llmEsaic.prompts.ESAICPrompts;
 
 public class ESAICCaseAnalyzer {
 
-	private SimpleESAICPrompter esaicPrompter;
+	protected SimpleESAICPrompter esaicPrompter;
 	
     protected static final String ESAIC_PATH = CommonConstants.getESAICDefaultPath();
 
@@ -53,7 +53,9 @@ public class ESAICCaseAnalyzer {
 			this.esaicPrompter.loadESAIC();
 		}
 		
+		System.err.println("Loading case structure description ... ");
 		String response = this.esaicPrompter.chatLLM(ESAICPrompts.getCaseLoadingHeader());
+		System.err.println("... done");
 		
 		this.caseID = UNSET;
 		this.caseDescription = UNSET;
