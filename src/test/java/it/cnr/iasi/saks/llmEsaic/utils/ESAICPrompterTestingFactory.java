@@ -32,7 +32,7 @@ public class ESAICPrompterTestingFactory {
 	private ESAICPrompterTestingFactory() {
 		this.testableESAIC =  new DummyESAICPrompter();
 		this.caseAnalyzer = new ESAICCaseAnalyzer(this.testableESAIC);
-		this.smartCaseAnalyzer = new ESAICSmartCaseAnalyzer(this.testableESAIC);
+		this.smartCaseAnalyzer = new ESAICSmartCaseAnalyzer(this.testableESAIC, false);
 	}
 	
 	public synchronized static ESAICPrompterTestingFactory getInstance() {
