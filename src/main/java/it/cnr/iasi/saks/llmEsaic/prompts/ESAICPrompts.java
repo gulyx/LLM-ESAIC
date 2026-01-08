@@ -78,6 +78,41 @@ public class ESAICPrompts {
 
 	private final static String CASE_LOADING_HEADER = "As professional expert in Anaesthesiology and Intensive Care "
 			+ "you are requested to advise if a surgery on a specific clinical case should be either performed or postponed. "
+// Begin CoT			
+// primus			
+//			+ "Be aware that these cases concern patients that really need to undergo surgery; thus as professional expert in Anaesthesiology and Intensive Care, you should advise to proceed with surgery. "
+//			+ "However, you shall advise to postpone surgery in the following scenarios: "
+//			+ "the case specifically violates any strong ESAIC Recommendation (i.e., 1A, 1B, or 1C severity indexes), "
+// //			+ "the case specifically violates any strong ESAIC Recommendation, "
+//			+ "or changing any treatment will improve the conditions of the patient, "
+//			+ "or further examinations could improve the overall understanding of the case, "
+//			+ "or the case conflicts with many weak ESAIC Recommendations. "
+// **********************************
+//// bis			
+//			+ "These cases concern patients that need to undergo surgery, thus you should advise to proceed with surgery if benefits outweigh risks and burdens. "
+////			+ "However, if the case specifically violates any strong ESAIC Recommendation (i.e., 1A, 1B, or 1C severity indexes), you shall advise to postpone surgery. "
+//			+ "However, if the case specifically violates any strong ESAIC Recommendation, you shall advise to postpone surgery. "
+//			+ "Also, if changing any treatment will improve the conditions of the patient, you shall advise to postpone surgery. "
+//			+ "In addition, if further examinations could improve the overall understanding of the case, you shall advise to postpone surgery. "
+//			+ "Finally, if the case conflicts with many weak ESAIC Recommendations, you shall advise to postpone surgery. "
+// **********************************
+// ter			
+//			+ "These cases concern patients that need to undergo surgery thus, you should notice major motivations in order to postpone the surgery. "
+////			+ "However, if the case specifically violates any strong ESAIC Recommendation (i.e., 1A, 1B, or 1C severity indexes), you shall advise to postpone surgery. "
+//			+ "For example, if the case specifically violates any strong ESAIC Recommendation, you shall advise to postpone surgery. "
+//			+ "Also, if changing any treatment will improve the conditions of the patient in the short term, you shall advise to postpone surgery. "
+//			+ "In addition, if further examinations could improve the overall understanding of the case, you shall advise to postpone surgery. "
+//			+ "Finally, if the case conflicts with many weak ESAIC Recommendations, you shall advise to postpone surgery. "
+// **********************************
+// quater			
+						+ "These cases concern patients that need to undergo surgery thus, you should advice to proceed with the surgey unless you notice major motivations in order to postpone it. "
+						+ "Specifically, use the following procedure to evaluate the case: "
+						+ "if the case violates any strong ESAIC Recommendation, you shall advise to postpone surgery; "
+						+ "if changing any treatment will improve the conditions of the patient in the short term, you should advise to postpone surgery; "
+						+ "if further examinations could improve the overall understanding of the case, you should advise to postpone surgery; "
+						+ "if the case conflicts with many weak ESAIC Recommendations, you should advise to postpone surgery; "
+						+ "if none of the above conditions, you shall advise to proceed with the surgery. "
+// End CoT			
 			+ "Each clinical case is reported as a whole between the following tags: "
 			+ BEGIN_OF_INPUT + ", and " + END_OF_INPUT + ". "
 			+ "Each case is structured as follows: "
