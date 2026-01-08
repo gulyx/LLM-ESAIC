@@ -23,7 +23,11 @@ public class ESAICSmartCaseAnalyzer extends ESAICCaseAnalyzer {
 	}
 
 	public ESAICSmartCaseAnalyzer (SimpleESAICPrompter esaicPrompter) {
-		super(esaicPrompter);
+		this(esaicPrompter, true);
+	}
+
+	public ESAICSmartCaseAnalyzer (SimpleESAICPrompter esaicPrompter, boolean loadCaseStructureDescription) {
+		super(esaicPrompter, loadCaseStructureDescription);
 		
 		this.caseProceedKeyList = new ArrayList<Integer>();
 		this.casePostponeKeyList = new ArrayList<Integer>();
@@ -41,7 +45,10 @@ public class ESAICSmartCaseAnalyzer extends ESAICCaseAnalyzer {
 		
 		if (this.isLoadedCaseValid()) {
 			String suggestion = null;
-			for (int i = 1; i <= REPETITIONS; i++) {
+			int i = 1;
+			boolean stopIterations = (i > REPETITIONS); 
+			while (! stopIterations) {
+//			for (int i = 1; i <= REPETITIONS; i++) {
 	   			System.err.println("Processing Case, repetition: " + i + " of " + REPETITIONS + " ...");
 				super.processCase();
 				suggestion = super.fetchSuggestion();
@@ -51,6 +58,13 @@ public class ESAICSmartCaseAnalyzer extends ESAICCaseAnalyzer {
 				this.parseDecision(i, suggestion);
 				this.parseExplaination(i, suggestion);
 	   			System.err.println("... done");
+	   			
+	   			boolean majorityFlag = (this.casePostponeKeyList.size() > (REPETITIONS/2)) || (this.caseProceedKeyList.size() > (REPETITIONS/2));
+	   			if (majorityFlag) {
+	   				System.err.println("Consensus has been already reached before all repetitions completed.");
+	   			}	
+	   			i++;
+	   			stopIterations = ((i > REPETITIONS) || (majorityFlag));
 			}
 			
    			System.err.println("Elaborating consensus on the Case ...");
