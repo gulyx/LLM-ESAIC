@@ -36,8 +36,8 @@ public abstract class AbstractPrompter {
 	private static final String OLLAMA_BASE_URL = "http://localhost:11434";
 // *****************************************************
 // *****************************************************
-    private static final String LLM_NAME = "llama3.2";
-    private static final String LLM_VERSION = "latest";
+//    private static final String LLM_NAME = "llama3.2";
+//    private static final String LLM_VERSION = "latest";
 // *****************************************************
 //	  private static final String LLM_NAME = "Almawave/Velvet";
 //    private static final String LLM_VERSION = "latest";
@@ -47,6 +47,12 @@ public abstract class AbstractPrompter {
 // *****************************************************
 //    private static final String LLM_NAME = "meditron";
 //    private static final String LLM_VERSION = "latest";    
+// *****************************************************
+//    private static final String LLM_NAME = "medllama2";
+//    private static final String LLM_VERSION = "latest";    
+// *****************************************************
+    private static final String LLM_NAME = "monotykamary/medichat-llama3";
+    private static final String LLM_VERSION = "latest";    
 // *****************************************************
 // *****************************************************
 //    private static final double LLM_TEMPERATURE = 0.8;
